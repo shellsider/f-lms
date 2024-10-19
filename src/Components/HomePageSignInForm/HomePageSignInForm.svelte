@@ -10,20 +10,22 @@
     <img src={logoUrl} alt="Logo" class="mx-auto w-32 sm:w-40 mb-6" />
 
     <!-- Input fields -->
-    <div>
+    <div class="text-left">
+        <label for="email" class="px-4 text-white text-lg mb-2 block">Email</label>
       <input 
         type="email" 
         placeholder="Email" 
         bind:value={email} 
-        class="w-full px-8 py-3 text-base rounded-full bg-gray-500 placeholder-white text-white focus:outline-none focus:ring-2 focus:ring-indigo-600 transition"
+        class="w-full px-8 py-3 text-base rounded-full bg-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-indigo-600 transition"
       />
     </div>
-    <div>
+    <div class="text-left">
+        <label for="email" class="px-4 text-white text-lg mb-2 block">Password</label>
       <input 
         type="password" 
         placeholder="Password" 
         bind:value={password} 
-        class="w-full px-8 py-3 text-base rounded-full bg-gray-500 placeholder-white text-white focus:outline-none focus:ring-2 focus:ring-indigo-600 transition"
+        class="w-full px-8 py-3 text-base rounded-full bg-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-indigo-600 transition"
       />
     </div>
 

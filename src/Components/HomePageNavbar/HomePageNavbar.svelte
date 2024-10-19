@@ -3,10 +3,10 @@
   let textLg = 'Guru Tegh Bahadur Institute of Technology';
 </script>
 
-<div class="flex items-center justify-between p-4 shadow-md h-16" style="background-color: rgba(39, 55, 77, 0.87);">
+<div class="flex items-center justify-between p-4 shadow-md h-16" style="background-color: rgba(42, 25, 76, 0.87);">
   <!-- Left side: Logo -->
   <div class="flex items-center">
-    <img src={logoUrl} alt="Logo" class="h-10" />
+    <img src={logoUrl} alt="Logo" class="h-12 w-12" />
 
     <!-- Full name on larger screens and acronym on smaller screens -->
     <h1 class="ml-2 text-lg text-white font-medium text-gray-700 hidden md:block">
