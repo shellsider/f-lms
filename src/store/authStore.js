@@ -47,6 +47,7 @@ const authSlice = createSlice({
     refreshToken: null,
     isAuthenticated: false,
     expiresIn: null,
+    username: null
   },
   reducers: {
     setAuth(state, action) {
@@ -54,12 +55,14 @@ const authSlice = createSlice({
       state.refreshToken = action.payload.refreshToken;
       state.isAuthenticated = true;
       state.expiresIn = action.payload.expiresIn;
+      state.username = action.payload.username;
     },
     clearAuth(state) {
       state.idToken = null;
       state.refreshToken = null;
       state.isAuthenticated = false;
       state.expiresIn = null;
+      state.username = null;
     },
   },
 });
@@ -98,6 +101,7 @@ const isAuthenticated = createReadableStore((state) => state.auth.isAuthenticate
 const idToken = createReadableStore((state) => state.auth.idToken);
 const refreshToken = createReadableStore((state) => state.auth.refreshToken);
 const expiresIn = createReadableStore((state) => state.auth.expiresIn);
+const username = createReadableStore((state) => state.auth.username);
 
 // Export the store, actions, and readable stores
 export {
@@ -109,4 +113,5 @@ export {
   idToken,
   refreshToken,
   expiresIn,
+  username,
 };
