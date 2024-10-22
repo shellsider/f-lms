@@ -56,7 +56,7 @@
         store.dispatch(setAuth({ idToken, refreshToken, expiresIn }));
 
         // Redirect to the dashboard
-        goto('/user/dashboard');
+        goto('/admin/dashboard');
       } else {
         errorMessage = response.data.detail || 'An error occurred during login.';
       }
@@ -80,7 +80,7 @@
         Welcome
       </h2>
       <h4 class="text-center text-l font-semibold text-gray-300">
-        User Login
+        Admin Login
       </h4>
 
       <form class="space-y-6" on:submit|preventDefault={handleLogin}>
@@ -134,7 +134,7 @@
 
       <!-- Additional Links -->
       <div class="mt-4 text-center text-gray-400 text-sm">
-        <a href="#" class="hover:underline" on:click="{() => goto('/admin/login')}">Admin Login</a> |
+        <a href="#" class="hover:underline" on:click="{() => goto('/')}">User Login</a> |
         <a href="#" class="hover:underline">Forgot password?</a> |
         <a href="#" class="hover:underline">Need Help?</a>
       </div>

@@ -48,7 +48,7 @@
     <div class="flex items-center space-x-2">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-        <img src={logoUrl} alt="Logo" class="h-12 w-12" on:click={() => {goto('/')}}/>
+        <img src={logoUrl} alt="Logo" class="h-12 w-12" on:click={() => {goto('/user/dashboard')}}/>
         <h1 class="ml-2 text-lg text-white font-semibold hidden sm:block">
             Leave Portal
         </h1>
