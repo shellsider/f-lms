@@ -56,13 +56,13 @@ import { goto } from '$app/navigation';
 
   <!-- Right side: Navigation Links and User Initials -->
   <div class="flex items-center space-x-6 ml-auto">
-      <a href="#" class="text-white text-base font-medium hover:text-[#ffc4d1] transition duration-200">
+      <a href="pendingLeaves" class="text-white text-base font-medium hover:text-[#ffc4d1] transition duration-200">
           Pending Leaves
       </a>
-      <a href="#" class="text-white text-base font-medium hover:text-[#ffc4d1] transition duration-200">
+      <a href="leaveHistory" class="text-white text-base font-medium hover:text-[#ffc4d1] transition duration-200">
           Leave History
       </a>
-      <a href="#" class="text-white text-base font-medium hover:text-[#ffc4d1] transition duration-200">
+      <a href="manageUser" class="text-white text-base font-medium hover:text-[#ffc4d1] transition duration-200">
         Manage User
     </a>
       <!-- User Initials Placeholder with Dropdown Trigger -->

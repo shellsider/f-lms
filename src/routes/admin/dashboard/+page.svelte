@@ -61,10 +61,12 @@
       <div class="container mx-auto p-6 text-white">
         <!-- Top Info Boxes -->
         <div class="flex justify-center space-x-10 mb-8">
-          <div class="box flex flex-col items-center justify-center">
-            <h2 class="text-lg">Pending Leaves</h2>
-            <p class="text-2xl font-semibold">{pendingLeaves}</p>
-          </div>
+            <a href="/admin/pendingLeaves" class="no-underline">
+                <div class="box flex flex-col items-center justify-center cursor-pointer">
+                  <h2 class="text-lg">Pending Leaves</h2>
+                  <p class="text-2xl font-semibold">{pendingLeaves}</p>
+                </div>
+              </a>
 
           <div class="box flex flex-col items-center justify-center">
             <h2 class="text-lg">Users on Leave</h2>
