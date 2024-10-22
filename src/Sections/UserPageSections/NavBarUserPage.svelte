@@ -48,27 +48,20 @@
 	<div class="flex items-center space-x-2">
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-		<img
-			src={logoUrl}
-			alt="Logo"
-			class="h-12 w-12"
-			on:click={() => {
-				goto('/');
-			}}
-		/>
+		<img src={logoUrl} alt="Logo" class="h-12 w-12" />
 		<h1 class="ml-2 hidden text-lg font-semibold text-white sm:block">Leave Portal</h1>
 	</div>
 
 	<!-- Right side: Navigation Links and User Initials -->
 	<div class="ml-auto flex items-center space-x-6">
 		<a
-			href="#"
+			href="/user/dashboard"
 			class="text-base font-medium text-white transition duration-200 hover:text-[#ffc4d1]"
 		>
 			Apply Leave
 		</a>
 		<a
-			href="#"
+			href="/user/leaveHistory"
 			class="text-base font-medium text-white transition duration-200 hover:text-[#ffc4d1]"
 		>
 			Leave History
@@ -90,14 +83,14 @@
 					transition:fly={{ y: -5, duration: 200 }}
 				>
 					<a
-						href="#"
+						href="/user/dashboard"
 						class="block px-4 py-2 text-sm transition duration-200 hover:bg-gray-200"
 						on:click={handleEdit}
 					>
 						Edit
 					</a>
 					<a
-						href="#"
+						href="/user/leaveHistory"
 						class="block px-4 py-2 text-sm transition duration-200 hover:bg-gray-200"
 						on:click={handleLogout}
 					>
