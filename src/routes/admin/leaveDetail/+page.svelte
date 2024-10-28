@@ -84,6 +84,8 @@
 			});
 			const data = response.data;
 			leaveDetails = data.leave_details;
+
+			// Set the adminRemarks only if there is already an existing remark in the leaveDetails
 			adminRemarks = leaveDetails.admin_remarks || '';
 			selectedStatus = leaveDetails.status || '';
 			errorMessage = ''; // Clear any previous error message
@@ -118,7 +120,8 @@
 			});
 
 			const data = response.data;
-			successMessage = data.message;
+			// successMessage = data.message;
+			successMessage = 'Leave Status Updated';
 			leaveDetails.status = selectedStatus; // Update status in leaveDetails
 			errorMessage = ''; // Clear any previous error message
 		} catch (error) {
@@ -233,5 +236,7 @@
 		margin: 0;
 		font-family: 'Inter', sans-serif;
 		background-color: #1d3247;
+		overflow-x: hidden;
+		overflow-y: auto;
 	}
 </style>

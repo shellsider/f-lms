@@ -6,7 +6,7 @@
 	import NavBarAdminPage from '../../../Sections/AdminPageSections/AdminNavbar.svelte';
 
 	let rehydrated = false;
-	let loading = true; // Start with loading spinner
+	let loading = true;
 	let allLeaves = [];
 
 	const axiosInstance = axios.create({
@@ -39,9 +39,8 @@
 
 	function checkAuth() {
 		if (!$isAuthenticated) {
-			goto('/admin/login'); // Update this path if necessary
+			goto('/admin/login');
 		} else {
-			// User is authenticated; fetch data on mount
 			fetchLeaves();
 		}
 	}
@@ -70,9 +69,9 @@
 				approved_leaves
 			} = response.data;
 
-			// Combine approved and denied leaves into one array
 			allLeaves = [
 				...approved_leaves.map((leave) => ({
+					id: leave.leave_id,
 					username: leave.username,
 					appliedOn: leave.applied_on,
 					from: leave.from_date,
@@ -81,6 +80,7 @@
 					status: 'Approved'
 				})),
 				...denied_leaves.map((leave) => ({
+					id: leave.leave_id,
 					username: leave.username,
 					appliedOn: leave.applied_on,
 					from: leave.from_date,
@@ -90,10 +90,7 @@
 				}))
 			];
 
-			// Sort the leaves by appliedOn date (optional)
 			allLeaves.sort((a, b) => new Date(b.appliedOn) - new Date(a.appliedOn));
-
-			console.log('All leaves data:', allLeaves);
 		} catch (err) {
 			console.error('Error fetching leaves:', err);
 		} finally {
@@ -101,12 +98,9 @@
 		}
 	}
 
-	function viewDetails(leave) {
-		// Navigate to the leave details page
-		// Adjust the route as necessary
-		goto(
-			`/admin/leaveDetail?username=${leave.username}&from=${leave.from}&to=${leave.to}&status=${leave.status}`
-		);
+	function viewDetails(leaveId) {
+		// Redirect to leaveDetail page with leaveId as a query parameter
+		goto(`/admin/leaveDetail?leaveId=${leaveId}`);
 	}
 </script>
 
@@ -118,7 +112,6 @@
 
 		<section id="table-section" class="flex flex-grow items-center justify-center">
 			{#if loading}
-				<!-- Display loading spinner -->
 				<div class="flex items-center justify-center">
 					<div
 						class="h-16 w-16 animate-spin rounded-full border-b-4 border-t-4 border-purple-600"
@@ -126,7 +119,6 @@
 				</div>
 			{:else}
 				<div class="container mx-auto p-6 text-white">
-					<!-- All Leaves Table -->
 					<div class="table-container">
 						<h2 class="mb-6 flex items-center justify-center text-center text-2xl">
 							Leave History
@@ -168,7 +160,7 @@
 											<td class="border border-gray-500 py-3">
 												<button
 													class="rounded bg-[#1D3247] px-6 py-2 text-white hover:bg-[#3C5175]"
-													on:click={() => viewDetails(leave)}
+													on:click={() => viewDetails(leave.id)}
 												>
 													View Details
 												</button>
@@ -177,7 +169,7 @@
 									{/each}
 								{:else}
 									<tr class="bg-[#6A427F] text-white">
-										<td class="border border-gray-500 py-3" colspan="8"> No leaves found. </td>
+										<td class="border border-gray-500 py-3" colspan="8">No leaves found.</td>
 									</tr>
 								{/if}
 							</tbody>
@@ -188,7 +180,6 @@
 		</section>
 	</main>
 {:else}
-	<!-- Show spinner during rehydration -->
 	<div class="flex min-h-screen items-center justify-center">
 		<div class="h-16 w-16 animate-spin rounded-full border-b-4 border-t-4 border-purple-600"></div>
 	</div>
@@ -199,9 +190,8 @@
 		max-width: 1200px;
 	}
 
-	/* Table container with increased height */
 	.table-container {
-		max-height: 700px; /* Adjust as needed */
+		max-height: 700px;
 		overflow-y: auto;
 	}
 
@@ -213,18 +203,17 @@
 
 	th,
 	td {
-		padding: 16px; /* Increased padding */
+		padding: 16px;
 	}
 
 	th {
-		font-size: 1.2rem; /* Increased font size for headers */
+		font-size: 1.2rem;
 	}
 
 	td {
-		font-size: 1.1rem; /* Increased font size for table data */
+		font-size: 1.1rem;
 	}
 
-	/* Ensure the body does not scroll */
 	:global(body) {
 		overflow: hidden;
 		background-color: #1d3247;

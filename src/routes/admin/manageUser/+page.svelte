@@ -5,12 +5,16 @@
 	import { isAuthenticated, persistor, idToken } from '../../../store/authStore.js';
 	import NavBarAdminPage from '../../../Sections/AdminPageSections/AdminNavbar.svelte';
 	import AddUserModal from '../../../Components/AddUserComponent/AddUserModal.svelte';
+	import DeleteUserModal from '../../../Components/DeleteUserMdoal/DeleteUserModal.svelte';
 
 	let rehydrated = false;
 	let loading = true;
 	let users = [];
 	let errorMessage = '';
-	let showAddUserModal = false; // To control modal visibility
+	let showAddUserModal = false;
+	let showDeleteModal = false;
+	let deleteUserEmail = '';
+	let deleteLoading = false;
 
 	const axiosInstance = axios.create({
 		baseURL: 'http://localhost:8000',
@@ -22,7 +26,6 @@
 	onMount(() => {
 		if (typeof window !== 'undefined') {
 			persistor.persist();
-
 			if (persistor.getState().bootstrapped) {
 				rehydrated = true;
 				checkAuth();
@@ -51,37 +54,18 @@
 	async function fetchUserDetails() {
 		try {
 			const currentIdToken = $idToken;
-
 			if (!currentIdToken) {
-				console.error('No idToken available');
 				loading = false;
 				return;
 			}
-
 			const response = await axiosInstance.get('/admin/userDetails', {
-				headers: {
-					Authorization: `Bearer ${currentIdToken}`,
-					'Content-Type': 'application/x-www-form-urlencoded'
-				}
+				headers: { Authorization: `Bearer ${currentIdToken}` }
 			});
-
 			const { user_details, total_users } = response.data;
-
-			if (total_users === 0) {
-				users = [];
-				errorMessage = 'No users found in the database.';
-			} else {
-				users = user_details.map((user) => ({
-					username: user.username,
-					fullname: user.fullname,
-					email: user.email,
-					empType: user.emp_type
-				}));
-				errorMessage = '';
-			}
+			users = total_users ? user_details : [];
+			errorMessage = total_users ? '' : 'No users found in the database.';
 		} catch (err) {
 			errorMessage = 'Error fetching user details.';
-			console.error(err);
 		} finally {
 			loading = false;
 		}
@@ -97,11 +81,39 @@
 
 	function handleUserAdded() {
 		closeAddUserModal();
-		fetchUserDetails(); // Refresh the user list after adding a new user
+		fetchUserDetails();
+	}
+
+	function openDeleteModal(email) {
+		deleteUserEmail = email;
+		showDeleteModal = true;
+		console.log('openDeleteModal called:', showDeleteModal, deleteUserEmail);
+	}
+
+	function closeDeleteModal() {
+		showDeleteModal = false;
+		deleteUserEmail = '';
+	}
+
+	async function confirmDelete({ detail: { email } }) {
+		deleteLoading = true;
+		try {
+			await axiosInstance.delete('/admin/deleteUser', {
+				data: new URLSearchParams({ email }),
+				headers: { Authorization: `Bearer ${$idToken}` }
+			});
+			closeDeleteModal();
+			fetchUserDetails();
+			errorMessage = ''; // Clear any previous error message
+		} catch (err) {
+			errorMessage = 'Error deleting user.';
+		} finally {
+			deleteLoading = false;
+		}
 	}
 </script>
 
-<main class="flex min-h-screen flex-col overflow-hidden">
+<main class="flex min-h-screen flex-col">
 	<section id="nav-section">
 		<NavBarAdminPage />
 	</section>
@@ -138,23 +150,22 @@
 							{#each users as user}
 								<tr class="block bg-[#6A427F] text-white sm:table-row sm:bg-transparent">
 									<td class="block border border-gray-500 px-4 py-3 sm:table-cell">
-										<strong class="sm:hidden">Username:</strong>
-										{user.username}
+										<strong class="sm:hidden">Username:</strong>{user.username}
 									</td>
 									<td class="block border border-gray-500 px-4 py-3 sm:table-cell">
-										<strong class="sm:hidden">Fullname:</strong>
-										{user.fullname}
+										<strong class="sm:hidden">Fullname:</strong>{user.fullname}
 									</td>
 									<td class="block border border-gray-500 px-4 py-3 sm:table-cell">
-										<strong class="sm:hidden">Email:</strong>
-										{user.email}
+										<strong class="sm:hidden">Email:</strong>{user.email}
 									</td>
 									<td class="block border border-gray-500 px-4 py-3 sm:table-cell">
-										<strong class="sm:hidden">Employee Type:</strong>
-										{user.empType}
+										<strong class="sm:hidden">Employee Type:</strong>{user.empType}
 									</td>
 									<td class="block border border-gray-500 px-4 py-3 sm:table-cell">
-										<button class="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600">
+										<button
+											class="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+											on:click={() => openDeleteModal(user.email)}
+										>
 											🗑️
 										</button>
 									</td>
@@ -163,7 +174,6 @@
 						</tbody>
 					</table>
 
-					<!-- Add User Button -->
 					<button
 						class="mt-4 rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
 						on:click={openAddUserModal}
@@ -173,14 +183,19 @@
 				</div>
 			{/if}
 		</div>
-
-		<!-- Conditionally render AddUserModal component -->
-		{#if showAddUserModal}
-			<AddUserModal on:close={closeAddUserModal} on:addUser={handleUserAdded} />
-		{/if}
 	</section>
 </main>
 
-<style>
-	/* Styling here as per your original table styles */
-</style>
+<!-- Modals moved outside of <main> -->
+{#if showAddUserModal}
+	<AddUserModal on:close={closeAddUserModal} on:addUser={handleUserAdded} />
+{/if}
+
+{#if showDeleteModal}
+	<DeleteUserModal
+		userEmail={deleteUserEmail}
+		on:close={closeDeleteModal}
+		on:confirmDelete={confirmDelete}
+		loading={deleteLoading}
+	/>
+{/if}
