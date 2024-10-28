@@ -1,15 +1,9 @@
 <script>
-	import axios from 'axios';
 	import { onMount } from 'svelte';
 	import { idToken } from '../../store/authStore.js'; // Adjust the path as necessary
+	import { axiosInstance } from '../../utils/axios.config.js';
 
 	// Create axios instance
-	const axiosInstance = axios.create({
-		baseURL: 'http://localhost:8000', // Replace with your actual API base URL
-		headers: {
-			'Content-Type': 'application/x-www-form-urlencoded'
-		}
-	});
 
 	let leaveHistory = [];
 	let currentIdToken = null;

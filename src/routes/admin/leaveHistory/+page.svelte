@@ -4,17 +4,11 @@
 	import { goto } from '$app/navigation';
 	import { isAuthenticated, persistor, idToken } from '../../../store/authStore.js';
 	import NavBarAdminPage from '../../../Sections/AdminPageSections/AdminNavbar.svelte';
+	import { axiosInstance } from '../../../utils/axios.config.js';
 
 	let rehydrated = false;
 	let loading = true;
 	let allLeaves = [];
-
-	const axiosInstance = axios.create({
-		baseURL: 'http://localhost:8000',
-		headers: {
-			'Content-Type': 'application/x-www-form-urlencoded'
-		}
-	});
 
 	onMount(() => {
 		if (typeof window !== 'undefined') {

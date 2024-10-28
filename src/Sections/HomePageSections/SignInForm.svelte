@@ -3,8 +3,9 @@
 <script>
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import axios from 'axios';
+
 	import { store, setAuth, isAuthenticated, persistor } from '../../store/authStore.js';
+	import { axiosInstance } from '../../utils/axios.config.js';
 
 	let email = '';
 	let password = '';
@@ -38,11 +39,7 @@
 			formData.append('email', email);
 			formData.append('password', password);
 
-			const response = await axios.post('http://localhost:8000/signin', formData, {
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded'
-				}
-			});
+			const response = await axiosInstance.post('http://localhost:8000/signin', formData);
 
 			if (response.status === 200) {
 				const { idToken, refreshToken, expiresIn, username } = response.data;
@@ -120,14 +117,14 @@
 				</div>
 			{/if}
 
-      <!-- Additional Links -->
-      <div class="mt-4 text-center text-gray-400 text-sm">
-        <a href="#" class="hover:underline" on:click="{() => goto('/admin/login')}">Admin Login</a> |
-        <a href="#" class="hover:underline">Forgot password?</a> |
-        <a href="#" class="hover:underline">Need Help?</a>
-      </div>
-    </div>
-  </div>
+			<!-- Additional Links -->
+			<div class="mt-4 text-center text-sm text-gray-400">
+				<a href="#" class="hover:underline" on:click={() => goto('/admin/login')}>Admin Login</a> |
+				<a href="#" class="hover:underline">Forgot password?</a> |
+				<a href="#" class="hover:underline">Need Help?</a>
+			</div>
+		</div>
+	</div>
 {:else}
 	<!-- Show a loading indicator while rehydrating -->
 	<div>Loading...</div>

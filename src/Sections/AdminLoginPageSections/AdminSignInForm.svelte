@@ -2,8 +2,8 @@
 <script>
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import axios from 'axios';
 	import { store, setAuth, persistor } from '../../store/authStore.js';
+	import { axiosInstance } from '../../utils/axios.config.js';
 
 	let email = '';
 	let password = '';
@@ -35,11 +35,7 @@
 			formData.append('email', email);
 			formData.append('password', password);
 
-			const response = await axios.post('http://localhost:8000/admin/signin', formData, {
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded'
-				}
-			});
+			const response = await axiosInstance.post('/admin/signin', formData);
 
 			if (response.status === 200) {
 				const { idToken, refreshToken, expiresIn } = response.data;

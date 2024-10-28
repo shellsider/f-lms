@@ -1,5 +1,5 @@
 <script>
-	import axios from 'axios';
+	import { axiosInstance } from '../../../utils/axios.config.js';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { isAuthenticated, persistor, idToken } from '../../../store/authStore.js';
@@ -11,12 +11,12 @@
 	let usersOnLeave = 0;
 	let usersOnLeaveToday = [];
 
-	const axiosInstance = axios.create({
-		baseURL: 'http://localhost:8000',
-		headers: {
-			'Content-Type': 'application/x-www-form-urlencoded'
-		}
-	});
+	// const axiosInstance = axios.create({
+	// 	baseURL: 'http://localhost:8000',
+	// 	headers: {
+	// 		'Content-Type': 'application/x-www-form-urlencoded'
+	// 	}
+	// });
 
 	onMount(() => {
 		if (typeof window !== 'undefined') {
@@ -81,8 +81,9 @@
 
 			pendingLeaves = total_number_pending_leaves;
 			usersOnLeave = total_number_approved_leaves;
-			usersOnLeaveToday = approved_users.map((username) => ({
-				fullname: username,
+			usersOnLeaveToday = approved_users.map((user) => ({
+				username: user.username,
+				leaveId: user.leave_id,
 				upto: currentDate
 			}));
 		} catch (err) {
@@ -92,8 +93,8 @@
 		}
 	}
 
-	function viewLeaveDetails(user) {
-		goto(`/admin/leaveDetail?fullname=${user.fullname}&upto=${user.upto}`);
+	function viewLeaveDetails(leaveId) {
+		goto(`/admin/leaveDetail?leaveId=${leaveId}`);
 	}
 </script>
 
@@ -147,7 +148,7 @@
 							<thead>
 								<tr class="bg-[#462257] text-white">
 									<th class="border border-gray-500 px-2 py-2">S.no</th>
-									<th class="border border-gray-500 px-2 py-2">Fullname</th>
+									<th class="border border-gray-500 px-2 py-2">Username</th>
 									<th class="border border-gray-500 px-2 py-2">Upto</th>
 									<th class="border border-gray-500 px-2 py-2">Action</th>
 								</tr>
@@ -157,12 +158,12 @@
 									{#each usersOnLeaveToday as user, index}
 										<tr class="bg-[#6A427F] text-white">
 											<td class="border border-gray-500 px-2 py-2">{index + 1}</td>
-											<td class="border border-gray-500 px-2 py-2">{user.fullname}</td>
+											<td class="border border-gray-500 px-2 py-2">{user.username}</td>
 											<td class="border border-gray-500 px-2 py-2">{user.upto}</td>
 											<td class="border border-gray-500 px-2 py-2">
 												<button
 													class="rounded bg-[#1D3247] px-4 py-1 text-white hover:bg-[#3C5175]"
-													on:click={() => viewLeaveDetails(user)}
+													on:click={() => viewLeaveDetails(user.leaveId)}
 												>
 													View Details
 												</button>

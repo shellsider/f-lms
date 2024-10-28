@@ -77,12 +77,7 @@
 			<input type="email" bind:value={email} required class="mb-2 w-full rounded border p-2" />
 
 			<label>Password:</label>
-			<input
-				type="password"
-				bind:value={password}
-				required
-				class="mb-2 w-full rounded border p-2"
-			/>
+			<input type="input" bind:value={password} required class="mb-2 w-full rounded border p-2" />
 
 			<label>Username:</label>
 			<input type="text" bind:value={username} required class="mb-2 w-full rounded border p-2" />

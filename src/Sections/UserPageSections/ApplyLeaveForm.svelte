@@ -1,7 +1,7 @@
 <script>
-	import axios from 'axios';
 	import { writable } from 'svelte/store';
 	import 'flatpickr/dist/flatpickr.css';
+	import { axiosInstance } from '../../utils/axios.config.js';
 
 	// Import the readable stores from authStore.js
 	import { idToken, username } from '../../store/authStore.js'; // Adjust the path as necessary
@@ -170,14 +170,6 @@
 		unsubscribeUsername();
 	});
 
-	// Initialize Axios instance (update the baseURL accordingly)
-	const axiosInstance = axios.create({
-		baseURL: 'http://localhost:8000', // Replace with your actual API base URL
-		headers: {
-			'Content-Type': 'application/x-www-form-urlencoded'
-		}
-	});
-
 	async function handleSubmit() {
 		// Reset errors
 		errors = {
@@ -309,6 +301,8 @@
 				alert('You are not authenticated. Please log in again.');
 				return;
 			}
+
+			console.log('DEBUG Token', currentIdToken);
 
 			// Get the current date in 'DD-MM-YYYY' format
 			const today = new Date();

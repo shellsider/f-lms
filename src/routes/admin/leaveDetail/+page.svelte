@@ -5,6 +5,7 @@
 	import NavBarAdminPage from '../../../Sections/AdminPageSections/AdminNavbar.svelte';
 	import axios from 'axios';
 	import { page } from '$app/stores';
+	import { axiosInstance } from '../../../utils/axios.config.js';
 
 	let rehydrated = false;
 	let loading = true; // Set to true initially for loading state
@@ -14,13 +15,6 @@
 	let selectedStatus = '';
 	let errorMessage = '';
 	let successMessage = '';
-
-	const axiosInstance = axios.create({
-		baseURL: 'http://localhost:8000',
-		headers: {
-			'Content-Type': 'application/x-www-form-urlencoded'
-		}
-	});
 
 	let currentIdToken;
 
