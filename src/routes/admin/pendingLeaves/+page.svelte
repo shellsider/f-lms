@@ -6,7 +6,7 @@
 	import NavBarAdminPage from '../../../Sections/AdminPageSections/AdminNavbar.svelte';
 
 	let rehydrated = false;
-	let loading = true; // Start with loading set to true
+	let loading = true;
 	let pendingLeaves = [];
 
 	const axiosInstance = axios.create({
@@ -39,9 +39,8 @@
 
 	function checkAuth() {
 		if (!$isAuthenticated) {
-			goto('/admin/login'); // Update this path if necessary
+			goto('/admin/login');
 		} else {
-			// User is authenticated; fetch data on mount
 			fetchPendingLeaves();
 		}
 	}
@@ -77,8 +76,6 @@
 					typeOfLeave: leave.leave_type
 				}));
 			}
-
-			console.log('Pending leaves data:', response.data);
 		} catch (err) {
 			console.error('Error fetching pending leaves:', err);
 		} finally {
@@ -87,7 +84,7 @@
 	}
 
 	function viewDetails(leaveId) {
-		// Navigate to the leave details page
+		// Navigate to the leave details page with the leaveId as a query parameter
 		goto(`/admin/leaveDetail?leaveId=${leaveId}`);
 	}
 </script>
@@ -187,7 +184,6 @@
 		</section>
 	</main>
 {:else}
-	<!-- Show spinner during rehydration -->
 	<div class="flex min-h-screen items-center justify-center">
 		<div class="h-16 w-16 animate-spin rounded-full border-b-4 border-t-4 border-purple-600"></div>
 	</div>
@@ -199,7 +195,7 @@
 	}
 
 	.table-container {
-		max-height: 600px; /* Adjust height as needed */
+		max-height: 600px;
 		overflow-y: auto;
 	}
 
@@ -231,9 +227,7 @@
 		height: 100vh;
 	}
 
-	/* Mobile-specific styling */
 	@media (max-width: 640px) {
-		/* Remove table headers and stack rows */
 		td {
 			display: block;
 			text-align: left;
