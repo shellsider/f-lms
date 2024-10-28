@@ -3,40 +3,50 @@
 	import logoUrl from '$lib/HomePageAssets/logo.png';
 	import { fly } from 'svelte/transition';
 	import { goto } from '$app/navigation';
+	import { isAuthenticated, idToken, persistor } from '../../store/authStore.js';
+
 	let textLg = 'Guru Tegh Bahadur Institute of Technology';
 	let userInitials = 'GS'; // Placeholder for user initials
 	let showDropdown = false;
 
 	const toggleDropdown = (event) => {
-		event.stopPropagation(); // Prevent this click from triggering the outside click listener
-		if (showDropdown) {
-			console.log(`1 Show Dropdown: ${showDropdown}`);
-			showDropdown = false;
-		} else {
-			console.log(`2 Show Dropdown: ${showDropdown}`);
-			showDropdown = true;
-		}
+		event.stopPropagation();
+		showDropdown = !showDropdown;
 	};
 
 	const handleEdit = () => {
 		console.log('Edit clicked');
-		showDropdown = false; // Close dropdown after action
+		showDropdown = false;
 	};
 
 	const handleLogout = () => {
 		console.log('Logout clicked');
-		showDropdown = false; // Close dropdown after action
+		showDropdown = false;
+
+		// Clear local storage
+		localStorage.clear();
+
+		// Purge persisted store (if using redux-persist or similar)
+		if (persistor && persistor.purge) {
+			persistor.purge();
+		}
+
+		// Reset Svelte stores
+		isAuthenticated.set(false);
+		idToken.set(null);
+
+		// Reload the page to trigger redirection
+		goto('/');
+		window.location.reload();
 	};
 
 	const closeDropdownOnClickOutside = () => {
 		showDropdown = false;
 	};
 
-	// Attach event listener to close dropdown when clicking outside
 	onMount(() => {
 		document.addEventListener('click', closeDropdownOnClickOutside);
 
-		// Clean up the event listener on component unmount
 		return () => {
 			document.removeEventListener('click', closeDropdownOnClickOutside);
 		};
@@ -89,13 +99,12 @@
 					>
 						Edit
 					</a>
-					<a
-						href="/user/leaveHistory"
+					<button
 						class="block px-4 py-2 text-sm transition duration-200 hover:bg-gray-200"
 						on:click={handleLogout}
 					>
 						Logout
-					</a>
+					</button>
 				</div>
 			{/if}
 		</div>
